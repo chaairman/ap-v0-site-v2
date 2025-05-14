@@ -16,17 +16,29 @@ import {
   Mail,
 } from "lucide-react";
 
+// GSAP Imports
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Footer from "@/components/footer";
 import SidebarLogo from "@/components/sidebar-logo";
-// Assuming VerticalLogo might be used elsewhere, ensure it's imported if needed
 // import VerticalLogo from "@/components/vertical-logo";
+
+// Register GSAP ScrollTrigger plugin
+// This needs to be done once, and it's safe to do it at the module level
+// if guarded against server-side execution.
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const heroRef = useRef<HTMLDivElement>(null);
   const servicesRef = useRef<HTMLDivElement>(null);
+  const animatedH3Ref = useRef<HTMLHeadingElement>(null); // Ref for the h3 to be animated by GSAP
+
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
@@ -37,13 +49,19 @@ export default function Home() {
     offset: ["start end", "end start"],
   });
 
-  // Keep motion transforms as they were
   const heroTextOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const heroTextY = useTransform(scrollYProgress, [0, 0.5], [0, -50]);
   const parallaxY = useTransform(scrollYProgress, [0, 1], [0, 150]);
-  const servicesScale = useTransform(servicesScrollProgress, [0, 0.5], [0.95, 1]);
-  const servicesOpacity = useTransform(servicesScrollProgress, [0, 0.3], [0.5, 1]);
-
+  const servicesScale = useTransform(
+    servicesScrollProgress,
+    [0, 0.5],
+    [0.95, 1]
+  );
+  const servicesOpacity = useTransform(
+    servicesScrollProgress,
+    [0, 0.3],
+    [0.5, 1]
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -52,25 +70,91 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
-  const [scrollY, setScrollY] = useState(0);
+  const [scrollYVal, setScrollYVal] = useState(0);
   const navThreshold = 100;
   const navAnimationDistance = 200;
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      setScrollYVal(window.scrollY);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const animationProgress = Math.min(
-    Math.max((scrollY - navThreshold) / navAnimationDistance, 0),
+    Math.max((scrollYVal - navThreshold) / navAnimationDistance, 0),
     1
   );
 
+  // GSAP Text Animation Logic
+  useEffect(() => {
+    const h3Element = animatedH3Ref.current;
+
+    if (h3Element && h3Element.textContent) {
+      const originalText = h3Element.textContent;
+      const words = originalText.split(/\s+/).filter(word => word.length > 0);
+      
+      h3Element.innerHTML = ''; // Clear original content
+
+      words.forEach((word, index) => {
+        const span = document.createElement('span');
+        span.textContent = word;
+        span.style.display = 'inline-block';
+        span.classList.add('anim-word');
+        h3Element.appendChild(span);
+        if (index < words.length - 1) {
+          h3Element.appendChild(document.createTextNode(' '));
+        }
+      });
+
+      const animWords = h3Element.querySelectorAll('.anim-word');
+
+      if (animWords.length > 0) {
+        const ctx = gsap.context(() => {
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: h3Element,
+              start: "top 85%", 
+              end: "bottom 60%", 
+              scrub: 0.3,
+              // markers: true, // For debugging
+            },
+          });
+
+          tl.fromTo(
+            h3Element,
+            { autoAlpha: 0.6 }, // Initial state of the whole h3
+            { autoAlpha: 1, duration: 0.5, ease: "none" },
+            0 
+          );
+
+          tl.fromTo(
+            animWords,
+            { // Initial state for each word
+              autoAlpha: 0,
+              y: 25,
+              color: "hsla(222, 84%, 4.9%, 0.5)", // Faded charcoal
+            },
+            { // Target state for each word
+              autoAlpha: 1,
+              y: 0,
+              color: "hsl(222.2, 84%, 4.9%)", // Full charcoal
+              duration: 0.6,
+              stagger: 0.05,
+              ease: "circ.out",
+            },
+            0 // Start word animation at the same time as the sentence fade
+          );
+        }, h3Element); 
+
+        return () => ctx.revert(); // Cleanup
+      }
+    }
+  }, []);
+
+
   return (
-    // Ensure main container is relative (already was)
     <main className="relative overflow-x-hidden">
       {/* Initial Loading Animation */}
       <motion.div
@@ -83,32 +167,27 @@ export default function Home() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: isLoading ? 1 : 0, scale: isLoading ? 1 : 1.1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="w-40 h-40 md:w-60 md:h-60" // Container size for the image
+          className="w-40 h-40 md:w-60 md:h-60"
         >
-          {/* FIX: Add priority to LCP image */}
           <Image
             src="/logo.png"
             alt="Amara & Partners"
             width={240}
             height={240}
-            className="object-contain" // object-contain is fine here
-            priority // <-- ADDED: Mark as priority
+            className="object-contain"
+            priority
           />
         </motion.div>
       </motion.div>
 
       {/* Sidebar Logo */}
       <SidebarLogo />
-      {/* VerticalLogo might be intended here too based on file names? */}
-      {/* <VerticalLogo /> */}
-
 
       {/* Navigation */}
       <header className="fixed top-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-sm">
         <div className="container mx-auto px-8 py-5 flex items-center">
           <div className="flex-1 md:hidden">
             <Link href="/" className="flex items-center space-x-2 z-20">
-              {/* Ensure width/height are set correctly, add h-auto if needed (though 32x32 seems fine) */}
               <Image
                 src="/logo.png"
                 alt="Amara & Partners"
@@ -130,7 +209,6 @@ export default function Home() {
              }}
              transition={{ duration: 0.1 }}
           >
-            {/* Links... */}
              <Link href="/about-us" className="text-charcoal text-xs uppercase tracking-wider hover:text-blue-500 transition-colors">About Us</Link>
              <Link href="/services" className="text-charcoal text-xs uppercase tracking-wider hover:text-blue-500 transition-colors">Services</Link>
              <Link href="/team" className="text-charcoal text-xs uppercase tracking-wider hover:text-blue-500 transition-colors">Our Team</Link>
@@ -169,7 +247,6 @@ export default function Home() {
             <Sheet>
               <SheetTrigger asChild>
                  <Button variant="ghost" size="icon" className="text-charcoal relative h-10 w-10">
-                   {/* Motion spans for animating hamburger icon */}
                    <motion.span className="absolute h-[2px] w-5 bg-charcoal/90" initial={{ opacity: 0, y: -8 }} animate={{ opacity: animationProgress, y: -4 }} transition={{ duration: 0.2, delay: 0.1 }}/>
                    <motion.span className="absolute h-[2px] w-5 bg-charcoal/90" initial={{ opacity: 0 }} animate={{ opacity: animationProgress }} transition={{ duration: 0.2, delay: 0.2 }}/>
                    <motion.span className="absolute h-[2px] w-5 bg-charcoal/90" initial={{ opacity: 0, y: 8 }} animate={{ opacity: animationProgress, y: 4 }} transition={{ duration: 0.2, delay: 0.3 }}/>
@@ -177,7 +254,6 @@ export default function Home() {
                  </Button>
               </SheetTrigger>
               <SheetContent side="right" className="bg-white text-charcoal">
-                {/* Sheet Content... */}
                 <div className="flex flex-col h-full">
                   <div className="flex justify-between items-center mb-8">
                     <Image src="/logo.png" alt="Amara & Partners" width={40} height={40} className="object-contain"/>
@@ -206,7 +282,6 @@ export default function Home() {
                  </Button>
                </SheetTrigger>
               <SheetContent side="right" className="bg-white text-charcoal">
-                {/* Sheet Content... */}
                  <div className="flex flex-col h-full">
                    <div className="flex justify-between items-center mb-8">
                      <Image src="/logo.png" alt="Amara & Partners" width={40} height={40} className="object-contain"/>
@@ -228,15 +303,12 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      {/* FIX: Add relative position as a safeguard for scroll calculations */}
       <section
         ref={heroRef}
         className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-white"
       >
-        {/* Content ... */}
         <div className="container mx-auto px-8 relative z-10 mt-16">
           <div className="max-w-4xl mx-auto">
-             {/* Motion divs... */}
              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 2.2, duration: 0.8 }} className="mb-4">
                <div className="flex items-center">
                  <div className="w-1 h-16 bg-blue-500 mr-4"></div>
@@ -260,9 +332,7 @@ export default function Home() {
       </section>
 
       {/* About Us Section */}
-      {/* Adding relative here too, just in case */}
       <section className="relative py-20 md:py-28 bg-white">
-        {/* Content ... */}
         <div className="container mx-auto px-8">
           <div className="grid grid-cols-12 gap-8">
              <div className="col-span-12 md:col-span-3">
@@ -272,7 +342,14 @@ export default function Home() {
                </motion.div>
              </div>
              <div className="col-span-12 md:col-span-9">
-               <motion.h3 className="text-4xl md:text-5xl lg:text-6xl font-bold text-charcoal mb-8 leading-tight" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}> See why we are uniquely equipped to support global businesses in a fast-changing world. </motion.h3>
+               {/* This is the h3 that will be animated by GSAP */}
+               <h3
+                 ref={animatedH3Ref}
+                 className="text-4xl md:text-5xl lg:text-6xl font-bold text-charcoal mb-8 leading-tight"
+                 style={{ opacity: 0.6 }} // Initial opacity for FOUC prevention
+               >
+                 See why we are uniquely equipped to support global businesses in a fast-changing world.
+               </h3>
                <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} className="max-w-2xl">
                  <p className="text-base text-charcoal/70 mb-8"> Founded on principles of innovation and excellence, Amara & Partners LLC has established itself as a leading legal consultancy in Abu Dhabi, serving clients across the region and beyond. </p>
                  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.4 }}>
@@ -285,9 +362,7 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      {/* FIX: Add relative position as a safeguard for scroll calculations */}
       <section ref={servicesRef} className="relative py-20 md:py-28 bg-white">
-        {/* Content ... */}
          <div className="container mx-auto px-8">
            <div className="grid grid-cols-12 gap-8">
              <div className="col-span-12 md:col-span-5 lg:col-span-4">
@@ -300,10 +375,8 @@ export default function Home() {
              </div>
              <div className="col-span-12 md:col-span-7 lg:col-span-8">
                <div className="space-y-4">
-                 {/* Service items... */}
                   <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} className="border-b border-gray-200 pb-4"> <div className="flex justify-between items-start"> <div> <h3 className="text-lg md:text-xl font-bold text-charcoal mb-1">Corporate & Commercial</h3> <p className="text-charcoal/70 text-xs mb-0 pr-12 leading-relaxed"> We provide market-leading companies, investment funds and financial institutions with top-tier corporate and M&A advice in every jurisdiction. </p> </div> <Link href="/services/corporate-commercial" className="flex-shrink-0 mt-1"> <ArrowRight className="h-4 w-4 text-charcoal/50 hover:text-blue-500 transition-colors" /> </Link> </div> </motion.div>
                   <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="border-b border-gray-200 pb-4"> <div className="flex justify-between items-start"> <div> <h3 className="text-lg md:text-xl font-bold text-charcoal mb-1">Disputes</h3> <p className="text-charcoal/70 text-xs mb-0 pr-12 leading-relaxed"> Our lawyers have vast experience litigating, arbitrating, investigating and resolving disputes across the world. We are ready to help, whatever the crisis. </p> </div> <Link href="/services/disputes" className="flex-shrink-0 mt-1"> <ArrowRight className="h-4 w-4 text-charcoal/50 hover:text-blue-500 transition-colors" /> </Link> </div> </motion.div>
-                  {/* ... other services */}
                    <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} className="border-b border-gray-200 pb-4"> <div className="flex justify-between items-start"> <div> <h3 className="text-lg md:text-xl font-bold text-charcoal mb-1">Finance</h3> <p className="text-charcoal/70 text-xs mb-0 pr-12 leading-relaxed"> Our finance team is renowned as one of the strongest and deepest around, with more than 1,000 attorneys located in all the major financial centers. </p> </div> <Link href="/services/finance" className="flex-shrink-0 mt-1"> <ArrowRight className="h-4 w-4 text-charcoal/50 hover:text-blue-500 transition-colors" /> </Link> </div> </motion.div>
                    <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.4 }} className="border-b border-gray-200 pb-4"> <div className="flex justify-between items-start"> <div> <h3 className="text-lg md:text-xl font-bold text-charcoal mb-1">Capital Markets</h3> <p className="text-charcoal/70 text-xs mb-0 pr-12 leading-relaxed"> We set precedents in the capital markets advising on all debt and equity products, from investment-grade and high-yield debt offerings to IPOs. </p> </div> <Link href="/services/capital-markets" className="flex-shrink-0 mt-1"> <ArrowRight className="h-4 w-4 text-charcoal/50 hover:text-blue-500 transition-colors" /> </Link> </div> </motion.div>
                    <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.5 }} className="border-b border-gray-200 pb-4"> <div className="flex justify-between items-start"> <div> <h3 className="text-lg md:text-xl font-bold text-charcoal mb-1">Advisory & Regulatory</h3> <p className="text-charcoal/70 text-xs mb-0 pr-12 leading-relaxed"> Our public company, corporate governance, employment, and regulatory attorneys act as trusted advisors to our clients on their most sensitive issues. </p> </div> <Link href="/services/advisory-regulatory" className="flex-shrink-0 mt-1"> <ArrowRight className="h-4 w-4 text-charcoal/50 hover:text-blue-500 transition-colors" /> </Link> </div> </motion.div>
@@ -315,13 +388,10 @@ export default function Home() {
       </section>
 
       {/* Insights Section */}
-      {/* Adding relative here too */}
       <section className="relative py-20 md:py-28 bg-white">
         <div className="container mx-auto px-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16">
-            {/* Heading... */}
              <motion.h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-charcoal mb-4 md:mb-0" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}> Spotlight on our news and insights </motion.h2>
-            {/* Link... */}
              <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }}> <Link href="/insights" className="inline-flex items-center text-blue-500 uppercase text-xs tracking-wider group"> <span className="mr-2 group-hover:mr-3 transition-all">VIEW ALL NEWS AND INSIGHTS</span> <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" /> </Link> </motion.div>
           </div>
 
@@ -332,19 +402,17 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="relative" // This outer div already relative, good.
+                className="relative"
               >
-                {/* FIX: Add relative position to the PARENT of the Image with fill */}
                 <div className="relative aspect-w-16 aspect-h-9 mb-6 bg-gray-100 overflow-hidden">
                   <Image
-                    src="/placeholder.svg?height=600&width=1000" // Consider using real images or fixed size placeholders
+                    src="/placeholder.svg?height=600&width=1000"
                     alt="Featured insight"
                     fill
-                    className="object-cover" // Ensure this covers correctly
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Optional: add sizes for optimization
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 </div>
-                {/* Text content... */}
                  <span className="text-xs text-charcoal/70 mb-1 block">Energy</span>
                  <h3 className="text-2xl md:text-3xl font-bold text-charcoal mb-3"> Amara & Partners strengthens U.S. energy and energy transition offering with two strategic partner hires </h3>
                  <div className="flex items-center mt-4">
@@ -366,19 +434,17 @@ export default function Home() {
                   className="grid grid-cols-12 gap-4 items-start"
                 >
                   <div className="col-span-5">
-                    {/* FIX: Add relative position to the PARENT of the Image with fill */}
                     <div className="relative aspect-w-1 aspect-h-1 bg-gray-100 overflow-hidden">
                       <Image
                         src="/placeholder.svg?height=300&width=300"
                         alt="AI insight"
                         fill
                         className="object-cover"
-                         sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 15vw" // Optional: add sizes for optimization
+                         sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 15vw"
                       />
                     </div>
                   </div>
                   <div className="col-span-7">
-                    {/* Text content... */}
                      <span className="text-xs text-charcoal/70 mb-1 block">Artificial Intelligence</span>
                      <h3 className="text-base font-bold text-charcoal mb-2"> Amara & Partners to roll out agentic AI agents targeting complex legal workflows </h3>
                      <div className="flex items-center mt-3">
@@ -398,19 +464,17 @@ export default function Home() {
                   className="grid grid-cols-12 gap-4 items-start"
                 >
                   <div className="col-span-5">
-                    {/* FIX: Add relative position to the PARENT of the Image with fill */}
                     <div className="relative aspect-w-1 aspect-h-1 bg-gray-100 overflow-hidden">
                       <Image
                         src="/placeholder.svg?height=300&width=300"
                         alt="Global trends"
                         fill
                         className="object-cover"
-                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 15vw" // Optional: add sizes for optimization
+                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 15vw"
                       />
                     </div>
                   </div>
                   <div className="col-span-7">
-                    {/* Text content... */}
                      <span className="text-xs text-charcoal/70 mb-1 block">Regulatory</span>
                      <h3 className="text-base font-bold text-charcoal mb-2"> Global trends in merger control enforcement </h3>
                      <div className="flex items-center mt-3">
@@ -428,7 +492,6 @@ export default function Home() {
 
       {/* Contact Section */}
        <section className="py-20 md:py-28 bg-blue-500 text-white">
-        {/* Content ... */}
          <div className="container mx-auto px-8">
            <div className="grid grid-cols-12 gap-8">
              <div className="col-span-12 md:col-span-6">
