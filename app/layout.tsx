@@ -5,6 +5,7 @@ import { Playfair_Display } from "next/font/google";
 // Assuming ThemeProvider comes from next-themes or a wrapper around it
 // Make sure this path is correct for your project structure
 import { ThemeProvider } from "@/components/theme-provider";
+import { amaraSansSerif, cabinetGrotesk } from "./fonts";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -26,7 +27,7 @@ export default function RootLayout({
   return (
     // Add suppressHydrationWarning to the element modified by ThemeProvider (<html> tag because of attribute="class")
     <html lang="en" suppressHydrationWarning>
-      <body className={`${playfair.variable}`}>
+      <body className={`${playfair.variable} ${amaraSansSerif.variable} ${cabinetGrotesk.variable} font-body`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

@@ -57,6 +57,39 @@ const config: Config = {
       },
       fontFamily: {
         serif: ["var(--font-playfair)", "serif"],
+        heading: ["var(--font-amara)", "sans-serif"],
+        display: ["var(--font-amara)", "sans-serif"],
+        sans: ["var(--font-cabinet)", "sans-serif"],
+        body: ["var(--font-cabinet)", "sans-serif"],
+      },
+      fontSize: {
+        'h1': ['32px', {
+          lineHeight: '36px',
+          letterSpacing: '-0.05em',
+          fontWeight: '700',
+        }],
+        'h2': ['24px', {
+          lineHeight: '30px',
+          letterSpacing: '-0.03em',
+          fontWeight: '500',
+        }],
+        'h3': ['20px', {
+          lineHeight: '26px',
+          letterSpacing: '-0.02em',
+          fontWeight: '400',
+        }],
+        'body': ['16px', {
+          lineHeight: '24px',
+          fontWeight: '400',
+        }],
+        'body-sm': ['14px', {
+          lineHeight: '20px',
+          fontWeight: '400',
+        }],
+        'body-xs': ['12px', {
+          lineHeight: '16px',
+          fontWeight: '400',
+        }],
       },
       keyframes: {
         "accordion-down": {

@@ -10,9 +10,9 @@ export default function Footer() {
           <div className="col-span-12 md:col-span-4">
             <div className="flex items-center space-x-2 mb-4">
               <Image src="/logo.png" alt="Amara & Partners" width={32} height={32} className="object-contain" />
-              <span className="text-base font-bold">Amara & Partners</span>
+              <span className="text-base font-bold font-heading">Amara & Partners</span>
             </div>
-            <p className="text-charcoal/70 mb-4 pr-8 text-xs">
+            <p className="text-charcoal/70 mb-4 pr-8 text-xs font-body">
               A modern legal consultancy delivering innovative solutions with a commercial approach and regional
               expertise.
             </p>
@@ -37,35 +37,35 @@ export default function Footer() {
           </div>
 
           <div className="col-span-6 md:col-span-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider mb-3">Navigation</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider mb-3 font-heading">Navigation</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/about-us" className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs">
+                <Link href="/about-us" className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs font-body">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs">
+                <Link href="/services" className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs font-body">
                   Services
                 </Link>
               </li>
               <li>
-                <Link href="/team" className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs">
+                <Link href="/team" className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs font-body">
                   Our Team
                 </Link>
               </li>
               <li>
-                <Link href="/insights" className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs">
+                <Link href="/insights" className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs font-body">
                   Insights
                 </Link>
               </li>
               <li>
-                <Link href="/careers" className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs">
+                <Link href="/careers" className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs font-body">
                   Careers
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs">
+                <Link href="/contact" className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs font-body">
                   Contact
                 </Link>
               </li>
@@ -73,12 +73,12 @@ export default function Footer() {
           </div>
 
           <div className="col-span-6 md:col-span-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider mb-3">Services</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider mb-3 font-heading">Services</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/services/dispute-resolution"
-                  className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs"
+                  className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs font-body"
                 >
                   Dispute Resolution
                 </Link>
@@ -86,7 +86,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/services/corporate-commercial"
-                  className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs"
+                  className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs font-body"
                 >
                   Corporate & Commercial
                 </Link>
@@ -94,7 +94,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/services/projects-operations"
-                  className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs"
+                  className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs font-body"
                 >
                   Projects & Operations
                 </Link>
@@ -102,7 +102,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/services/specialized-regulatory"
-                  className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs"
+                  className="text-charcoal/70 hover:text-blue-500 transition-colors text-xs font-body"
                 >
                   Specialized Regulatory
                 </Link>
@@ -111,15 +111,15 @@ export default function Footer() {
           </div>
 
           <div className="col-span-12 md:col-span-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider mb-3">Contact</h3>
-            <p className="text-charcoal/70 mb-1 text-xs">Al Sila Tower, Abu Dhabi Global Market Square</p>
-            <p className="text-charcoal/70 mb-3 text-xs">Al Maryah Island, Abu Dhabi, UAE</p>
-            <p className="text-charcoal/70 mb-1 text-xs">+971 2 123 4567</p>
-            <p className="text-charcoal/70 mb-3 text-xs">info@amarapartners.com</p>
+            <h3 className="text-xs font-bold uppercase tracking-wider mb-3 font-heading">Contact</h3>
+            <p className="text-charcoal/70 mb-1 text-xs font-body">Al Sila Tower, Abu Dhabi Global Market Square</p>
+            <p className="text-charcoal/70 mb-3 text-xs font-body">Al Maryah Island, Abu Dhabi, UAE</p>
+            <p className="text-charcoal/70 mb-1 text-xs font-body">+971 2 123 4567</p>
+            <p className="text-charcoal/70 mb-3 text-xs font-body">info@amarapartners.com</p>
           </div>
         </div>
 
-        <div className="border-t border-charcoal/10 mt-8 pt-6 text-center text-charcoal/50 text-[10px]">
+        <div className="border-t border-charcoal/10 mt-8 pt-6 text-center text-charcoal/50 text-[10px] font-body">
           <p>© {new Date().getFullYear()} Amara & Partners LLC. All rights reserved.</p>
         </div>
       </div>
