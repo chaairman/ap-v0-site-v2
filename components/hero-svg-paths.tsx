@@ -31,26 +31,24 @@ export function HeroSvgPaths() {
       function initAnimation() {
         if (!svgRef.current || !ballRef.current) return
 
-        // Animate the paths drawing with staggered timing
+        // Animate the paths with smooth opacity fade-in
         pathsRef.current.forEach((path, index) => {
           if (!path) return
 
-          // Set initial stroke-dasharray and stroke-dashoffset for draw animation
-          const pathLength = path.getTotalLength()
-          path.style.strokeDasharray = `${pathLength}`
-          path.style.strokeDashoffset = `${pathLength}`
+          // Start with opacity 0 for smooth fade-in
+          path.style.opacity = '0'
 
           gsap.to(path, {
-            strokeDashoffset: 0,
-            duration: 2.5,
-            ease: "power2.inOut",
-            delay: 0.5 + index * 0.3, // Stagger the animations
+            opacity: 0.7, // Match the opacity from the SVG
+            duration: 1.5,
+            ease: "power2.out",
+            delay: 0.3 + index * 0.2, // Stagger the animations
           })
         })
 
         // Add enhanced pulsing glow effect to the ball
         gsap.to(ballRef.current, {
-          filter: `drop-shadow(0px 0px 15px ${glowColor}) drop-shadow(0px 0px 25px ${glowColor})`,
+          filter: `drop-shadow(0px 0px 8px ${glowColor}) drop-shadow(0px 0px 12px ${glowColor})`,
           repeat: -1,
           yoyo: true,
           duration: 1.5,
@@ -170,8 +168,14 @@ export function HeroSvgPaths() {
           className="ball" 
           cx="1565" 
           cy="0" 
-          r="8"
-          fill={glowColor} 
+          r="2"
+          fill={glowColor}
+          vectorEffect="non-scaling-stroke"
+          style={{ 
+            transformOrigin: 'center',
+            transform: 'scale(1, 1)',
+            vectorEffect: 'non-scaling-stroke'
+          }}
         />
       </svg>
   )

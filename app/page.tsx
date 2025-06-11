@@ -326,7 +326,7 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section ref={servicesRef} className="relative py-20 md:py-28 bg-charcoal">
+      <section ref={servicesRef} className="relative py-20 md:py-28 bg-transparent">
          <div className="container mx-auto px-8">
            <div className="grid grid-cols-12 gap-8">
              <div className="col-span-12 md:col-span-5 lg:col-span-4">
@@ -346,7 +346,7 @@ export default function Home() {
                  <Link href="/services" className="inline-flex items-center text-charcoal uppercase text-xs tracking-wider font-body group"> <span className="mr-2 group-hover:mr-3 transition-all">ALL EXPERTISE</span> <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" /> </Link>
                </motion.div>
              </div>
-             <div className="col-span-12 md:col-span-7 lg:col-span-8">
+             <div className="col-span-12 md:col-span-7 lg:col-span-8 bg-transparent">
                <div className="space-y-4">
                   <motion.div 
                     style={{ 
@@ -468,7 +468,7 @@ export default function Home() {
       </section>
 
       {/* Insights Section */}
-      <section className="relative py-20 md:py-28 bg-charcoal">
+      <section className="relative py-20 md:py-28 bg-transparent">
         <div className="container mx-auto px-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16">
              <motion.h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-light-grey mb-4 md:mb-0" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}> Spotlight on our news and insights </motion.h2>
