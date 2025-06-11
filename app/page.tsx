@@ -137,6 +137,7 @@ export default function Home() {
 
   return (
     <main className="relative overflow-x-hidden bg-charcoal">
+      <HeroSvgPaths />
       {/* Curved Path Background */}
       {/* <CurvedPath /> */}
       
@@ -289,9 +290,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Right Column - SVG Paths */}
-        <div className="w-[35%] lg:w-[30%] relative bg-charcoal">
-          <HeroSvgPaths />
+        {/* Right Column */}
+        <div className="w-[35%] lg:w-[30%] relative bg-transparent z-10">
         </div>
       </section>
 
