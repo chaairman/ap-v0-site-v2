@@ -44,10 +44,24 @@ const config: Config = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        charcoal: "#333333",
+        charcoal: {
+          DEFAULT: "#1E242D",
+          light: "#2A3038",
+          dark: "#171C23",
+        },
+        gold: {
+          DEFAULT: "#DBCDAE",
+          light: "#E5D8BC",
+          dark: "#C9B99A",
+        },
+        "light-grey": {
+          DEFAULT: "#E2E3E4",
+          muted: "#B8BABC",
+        },
+        "shadow-grey": "#565E71",
         blue: {
-          500: "#3b82f6",
-          600: "#2563eb",
+          500: "#DBCDAE",
+          600: "#C9B99A",
         },
       },
       borderRadius: {

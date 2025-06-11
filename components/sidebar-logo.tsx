@@ -12,9 +12,9 @@ export default function SidebarLogo() {
       transition={{ delay: 2.8, duration: 0.8 }}
     >
       <Link href="/" className="flex flex-col items-center">
-        <div className="vertical-text text-charcoal font-medium text-xl tracking-widest font-heading">
+        <div className="vertical-text text-light-grey font-medium text-xl tracking-widest font-heading">
           AMARA
-          <span className="text-blue-500 mx-1">&</span>
+          <span className="text-gold mx-1">&</span>
           PARTNERS
         </div>
       </Link>

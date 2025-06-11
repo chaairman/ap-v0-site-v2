@@ -8,9 +8,9 @@ export function CurvedPath() {
   const ballRef = useRef<SVGCircleElement>(null)
   const pathsRef = useRef<(SVGPathElement | null)[]>([])
 
-  // Define our new color - DBCDAE or a slightly darker version
-  const lineColor = "#C9B99A" // Slightly darker version of DBCDAE for better visibility
-  const glowColor = "#DBCDAE"
+  // Define our new color - Gold from the color scheme
+  const lineColor = "#C9B99A" // Darker gold for better visibility
+  const glowColor = "#DBCDAE" // Main gold color
 
   useEffect(() => {
     if (typeof window !== "undefined") {

@@ -12,7 +12,7 @@ export default function VerticalLogo() {
       transition={{ delay: 2.8, duration: 0.8 }}
     >
       <Link href="/" className="flex flex-col items-center">
-        <div className="vertical-text text-charcoal font-serif text-xl tracking-widest">
+        <div className="vertical-text text-light-grey font-serif text-xl tracking-widest">
           AMARA
           <span className="block my-2">&</span>
           PARTNERS
