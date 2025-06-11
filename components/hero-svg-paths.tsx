@@ -95,8 +95,8 @@ export function HeroSvgPaths() {
     <svg
       ref={svgRef}
       className="fixed inset-0 w-full h-full pointer-events-none z-0"
-      preserveAspectRatio="none"
-      viewBox="0 0 1980 100"
+      preserveAspectRatio="xMaxYMid meet"
+      viewBox="0 0 1920 1080"
       style={{ height: '100vh' }}
     >
         {/* Define the glow filter */}
@@ -107,68 +107,73 @@ export function HeroSvgPaths() {
           </filter>
         </defs>
 
-        {/* Path 1 - Extended to full height */}
+        {/* Path 1 */}
         <path
           ref={(el) => addPathRef(el)}
-          d="M1607.23 0C1607.23 0 1691.97 15 1644.62 27C1597.27 39 1520.01 51 1577.33 61C1634.65 71 1634.65 100 1634.65 100"
+          d="M1607.23 0C1607.23 0 1691.97 186.253 1644.62 339.265C1597.27 492.277 1520.01 636.847 1577.33 760.84C1634.65 884.833 1634.65 1079 1634.65 1079"
           stroke={lineColor}
           strokeWidth="2"
           fill="none"
           opacity="0.7"
           vectorEffect="non-scaling-stroke"
+          filter="url(#heroGlow)"
         />
 
-        {/* Path 2 - Extended to full height */}
+        {/* Path 2 */}
         <path
           ref={(el) => addPathRef(el)}
-          d="M1544.93 0C1544.93 0 1591.3 15 1564.84 23C1538.38 31 1523.4 33 1490.19 41C1456.98 49 1502.42 57 1490.19 65C1477.95 73 1423 100 1423 100"
+          d="M1544.93 0C1544.93 0 1591.3 187.599 1564.84 292.663C1538.38 397.728 1523.4 413.595 1490.19 514.084C1456.98 614.574 1502.42 714.006 1490.19 806.922C1477.95 899.839 1423 1080 1423 1080"
           stroke={lineColor}
           strokeWidth="2"
           fill="none"
           opacity="0.7"
           vectorEffect="non-scaling-stroke"
+          filter="url(#heroGlow)"
         />
 
-        {/* Path 3 - Main path for ball animation - Extended to full height */}
+        {/* Path 3 - Main path for ball animation */}
         <path
           ref={(el) => addPathRef(el)}
-          d="M1565.29 0C1565.29 0 1625.57 10 1602.9 27C1580.23 44 1429.52 44 1535.21 61C1640.9 78 1592.87 100 1592.87 100"
+          d="M1565.29 0C1565.29 0 1625.57 124.108 1602.9 339.579C1580.23 555.051 1429.52 553.995 1535.21 761.545C1640.9 969.095 1592.87 1080 1592.87 1080"
           stroke={lineColor}
           strokeWidth="2.5"
           fill="none"
           opacity="0.8"
           vectorEffect="non-scaling-stroke"
+          filter="url(#heroGlow)"
         />
 
-        {/* Path 4 - Extended to full height */}
+        {/* Path 4 */}
         <path
           ref={(el) => addPathRef(el)}
-          d="M1734.36 0C1734.36 0 1937.88 12 1771.75 27C1605.63 42 1518.6 49 1704.45 61C1890.3 73 1761.78 100 1761.78 100"
+          d="M1734.36 0C1734.36 0 1937.88 152.626 1771.75 339.579C1605.63 526.533 1518.6 615.257 1704.45 761.545C1890.3 907.834 1761.78 1080 1761.78 1080"
           stroke={lineColor}
           strokeWidth="2"
           fill="none"
           opacity="0.7"
           vectorEffect="non-scaling-stroke"
+          filter="url(#heroGlow)"
         />
 
-        {/* Path 5 - Extended to full height */}
+        {/* Path 5 */}
         <path
           ref={(el) => addPathRef(el)}
-          d="M1798.77 0C1798.77 0 1913.49 16 1836.3 27C1759.12 38 1656.24 45 1768.74 61C1881.24 77 1826.29 100 1826.29 100"
+          d="M1798.77 0C1798.77 0 1913.49 202.797 1836.3 339.579C1759.12 476.362 1656.24 566.142 1768.74 761.545C1881.24 956.949 1826.29 1080 1826.29 1080"
           stroke={lineColor}
           strokeWidth="2"
           fill="none"
           opacity="0.7"
           vectorEffect="non-scaling-stroke"
+          filter="url(#heroGlow)"
         />
 
         {/* The ball that follows the third path */}
         <circle 
           ref={ballRef} 
           className="ball" 
-          cx="1565" 
+          cx="1565.29" 
           cy="0" 
-          r="2"
+          r="5"
           fill={glowColor}
           vectorEffect="non-scaling-stroke"
           style={{ 
