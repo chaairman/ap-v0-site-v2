@@ -4,8 +4,8 @@ import { Facebook, Twitter, Linkedin, Instagram } from "lucide-react"
 
 export default function Footer() {
   return (
-    <footer className="bg-charcoal-light text-light-grey py-10">
-      <div className="container mx-auto px-8">
+    <footer className="bg-charcoal-light text-light-grey py-8 sm:py-10">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8">
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-12 md:col-span-4">
             <div className="flex items-center space-x-2 mb-4">
@@ -18,25 +18,25 @@ export default function Footer() {
             </p>
             <div className="flex space-x-3">
               <Link href="#" className="text-light-grey/70 hover:text-gold transition-colors">
-                <Facebook className="h-4 w-4" />
+                <Facebook className="h-5 w-5" />
                 <span className="sr-only">Facebook</span>
               </Link>
               <Link href="#" className="text-light-grey/70 hover:text-gold transition-colors">
-                <Twitter className="h-4 w-4" />
+                <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
               </Link>
               <Link href="#" className="text-light-grey/70 hover:text-gold transition-colors">
-                <Linkedin className="h-4 w-4" />
+                <Linkedin className="h-5 w-5" />
                 <span className="sr-only">LinkedIn</span>
               </Link>
               <Link href="#" className="text-light-grey/70 hover:text-gold transition-colors">
-                <Instagram className="h-4 w-4" />
+                <Instagram className="h-5 w-5" />
                 <span className="sr-only">Instagram</span>
               </Link>
             </div>
           </div>
 
-          <div className="col-span-6 md:col-span-2">
+          <div className="col-span-12 sm:col-span-6 md:col-span-2">
             <h3 className="text-xs font-bold uppercase tracking-wider mb-3 font-heading">Navigation</h3>
             <ul className="space-y-2">
               <li>
@@ -72,7 +72,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="col-span-6 md:col-span-2">
+          <div className="col-span-12 sm:col-span-6 md:col-span-2">
             <h3 className="text-xs font-bold uppercase tracking-wider mb-3 font-heading">Services</h3>
             <ul className="space-y-2">
               <li>

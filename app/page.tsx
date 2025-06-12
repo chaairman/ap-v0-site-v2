@@ -217,12 +217,12 @@ export default function Home() {
       {/* Hero Section - Two Column Layout */}
       <section
         ref={heroRef}
-        className="relative min-h-screen flex overflow-hidden"
+        className="relative min-h-screen flex flex-col md:flex-row overflow-hidden"
       >
         {/* Left Column - Main Content */}
-        <div className="w-[65%] lg:w-[70%] bg-charcoal flex items-center justify-center relative z-10">
+        <div className="w-full md:w-[65%] lg:w-[70%] bg-charcoal flex items-center justify-center relative z-10">
           {/* Navigation - Inside Left Column */}
-          <header className="fixed top-0 left-0 w-[65%] lg:w-[70%] z-40 bg-transparent">
+          <header className="fixed top-0 left-0 w-full md:w-[65%] lg:w-[70%] z-40 bg-transparent">
             <div className="flex items-center justify-between py-6">
               {/* Brand Logo - Far Left */}
               <motion.div
@@ -307,7 +307,7 @@ export default function Home() {
               </div>
             </div>
           </header>
-          <div className="max-w-4xl mx-auto px-8 py-20">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-20">
             <motion.div 
               initial={{ opacity: 0, y: 20 }} 
               animate={{ opacity: 1, y: 0 }} 
@@ -326,9 +326,9 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }} 
               animate={{ opacity: 1, y: 0 }} 
               transition={{ delay: 3.0, duration: 0.8 }} 
-              className="absolute bottom-16 left-12"
+              className="absolute bottom-8 left-6 md:bottom-16 md:left-12"
             >
-              <div className="font-heading text-7xl md:text-8xl lg:text-8xl font-bold leading-tight">
+              <div className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
                 <div className="text-gold">The future of law.</div>
                 <div id="hero-excellence-text" className="text-white">Excellence, redefined.</div>
               </div>
@@ -337,16 +337,19 @@ export default function Home() {
         </div>
 
         {/* Right Column */}
-        <div className="w-[35%] lg:w-[30%] relative bg-transparent z-10">
+        <div className="hidden md:block md:w-[35%] lg:w-[30%] relative bg-transparent z-10">
+          {/* This column is hidden on screens smaller than 'md' breakpoint.
+              It's primarily for visual effect on larger screens.
+           */}
         </div>
       </section>
 
       {/* About Us Section */}
-      <section className="relative py-20 md:py-28 bg-transparent">
-        <div className="container mx-auto px-8 relative z-10">
+      <section className="relative py-16 sm:py-20 md:py-28 bg-transparent">
+        <div className="container mx-auto px-4 sm:px-6 md:px-8 relative z-10">
           <div className="grid grid-cols-12 gap-8">
              <div className="col-span-12 md:col-span-1">
-               <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="sticky top-32">
+               <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="md:sticky top-32">
                  <h2 className="text-sm font-heading font-bold uppercase tracking-wider text-light-grey mb-2">ABOUT US</h2>
                  <div className="w-12 h-1 bg-gold"></div>
                </motion.div>
@@ -354,7 +357,7 @@ export default function Home() {
              <div className="col-span-12 md:col-span-9">
                {/* This is the h3 that will be animated by SplitType */}
                <h3
-                 className="reveal-type font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-light-grey mb-8 leading-tight"
+                 className="reveal-type font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-light-grey mb-8 leading-tight"
                  data-bg-color="hsla(45, 25%, 72%, 0.5)"
                  data-fg-color="hsl(45, 25%, 72%)"
                >
@@ -372,22 +375,22 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section ref={servicesRef} className="relative py-20 md:py-28 bg-transparent">
-         <div className="container mx-auto px-8">
+      <section ref={servicesRef} className="relative py-16 sm:py-20 md:py-28 bg-transparent">
+         <div className="container mx-auto px-4 sm:px-6 md:px-8">
            <div className="grid grid-cols-12 gap-8">
              <div className="col-span-12 md:col-span-4 lg:col-span-3 md:col-start-1 lg:col-start-1">
                <motion.div 
                  style={{ 
                    opacity: useTransform(servicesItemsProgress, [0, 1], [0, 1]),
                    y: useTransform(servicesItemsProgress, [0, 1], [20, 0]),
-                   position: "sticky", 
-                   top: "32px"
+                   // position: "sticky", // Removed for responsive control via className
+                   // top: "32px" // Removed for responsive control via className
                  }}
                  transition={{ duration: 0.6 }} 
-                 className="bg-gold text-charcoal p-6 md:p-8 rounded-sm" 
+                 className="bg-gold text-charcoal p-6 md:p-8 rounded-sm md:sticky top-32"
                >
                  <span className="text-xs uppercase tracking-wider mb-3 block font-body">EXPERTISE</span>
-                 <h2 className="font-heading text-xl md:text-2xl lg:text-3xl font-bold mb-4">Explore our capabilities</h2>
+                 <h2 className="font-heading text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-4">Explore our capabilities</h2>
                  <p className="text-charcoal/80 text-xs mb-6 leading-relaxed font-body"> Our teams are known for the quality of their legal thinking – and for creating cutting-edge products, services and technologies. </p>
                  <Link href="/services" className="inline-flex items-center text-charcoal uppercase text-xs tracking-wider font-body group"> <span className="mr-2 group-hover:mr-3 transition-all">ALL EXPERTISE</span> <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" /> </Link>
                </motion.div>
@@ -404,8 +407,8 @@ export default function Home() {
                   > 
                     <div className="flex justify-between items-start"> 
                       <div> 
-                        <h3 className="font-heading text-lg md:text-xl font-bold text-light-grey mb-1">Corporate & Commercial</h3> 
-                        <p className="font-body text-light-grey/70 text-xs mb-0 pr-12 leading-relaxed"> We provide market-leading companies, investment funds and financial institutions with top-tier corporate and M&A advice in every jurisdiction. </p> 
+                        <h3 className="font-heading text-base sm:text-lg md:text-xl font-bold text-light-grey mb-1">Corporate & Commercial</h3>
+                        <p className="font-body text-light-grey/70 text-xs mb-0 pr-4 sm:pr-6 leading-relaxed"> We provide market-leading companies, investment funds and financial institutions with top-tier corporate and M&A advice in every jurisdiction. </p>
                       </div> 
                       <Link href="/services/corporate-commercial" className="flex-shrink-0 mt-1"> 
                         <ArrowRight className="h-4 w-4 text-light-grey/50 hover:text-gold transition-colors" /> 
@@ -423,8 +426,8 @@ export default function Home() {
                   > 
                     <div className="flex justify-between items-start"> 
                       <div> 
-                        <h3 className="font-heading text-lg md:text-xl font-bold text-light-grey mb-1">Disputes</h3> 
-                        <p className="font-body text-light-grey/70 text-xs mb-0 pr-12 leading-relaxed"> Our lawyers have vast experience litigating, arbitrating, investigating and resolving disputes across the world. We are ready to help, whatever the crisis. </p> 
+                        <h3 className="font-heading text-base sm:text-lg md:text-xl font-bold text-light-grey mb-1">Disputes</h3>
+                        <p className="font-body text-light-grey/70 text-xs mb-0 pr-4 sm:pr-6 leading-relaxed"> Our lawyers have vast experience litigating, arbitrating, investigating and resolving disputes across the world. We are ready to help, whatever the crisis. </p>
                       </div> 
                       <Link href="/services/disputes" className="flex-shrink-0 mt-1"> 
                         <ArrowRight className="h-4 w-4 text-light-grey/50 hover:text-gold transition-colors" /> 
@@ -442,8 +445,8 @@ export default function Home() {
                   > 
                     <div className="flex justify-between items-start"> 
                       <div> 
-                        <h3 className="font-heading text-lg md:text-xl font-bold text-light-grey mb-1">Finance</h3> 
-                        <p className="font-body text-light-grey/70 text-xs mb-0 pr-12 leading-relaxed"> Our finance team is renowned as one of the strongest and deepest around, with more than 1,000 attorneys located in all the major financial centers. </p> 
+                        <h3 className="font-heading text-base sm:text-lg md:text-xl font-bold text-light-grey mb-1">Finance</h3>
+                        <p className="font-body text-light-grey/70 text-xs mb-0 pr-4 sm:pr-6 leading-relaxed"> Our finance team is renowned as one of the strongest and deepest around, with more than 1,000 attorneys located in all the major financial centers. </p>
                       </div> 
                       <Link href="/services/finance" className="flex-shrink-0 mt-1"> 
                         <ArrowRight className="h-4 w-4 text-light-grey/50 hover:text-gold transition-colors" /> 
@@ -461,8 +464,8 @@ export default function Home() {
                   > 
                     <div className="flex justify-between items-start"> 
                       <div> 
-                        <h3 className="font-heading text-lg md:text-xl font-bold text-light-grey mb-1">Capital Markets</h3> 
-                        <p className="font-body text-light-grey/70 text-xs mb-0 pr-12 leading-relaxed"> We set precedents in the capital markets advising on all debt and equity products, from investment-grade and high-yield debt offerings to IPOs. </p> 
+                        <h3 className="font-heading text-base sm:text-lg md:text-xl font-bold text-light-grey mb-1">Capital Markets</h3>
+                        <p className="font-body text-light-grey/70 text-xs mb-0 pr-4 sm:pr-6 leading-relaxed"> We set precedents in the capital markets advising on all debt and equity products, from investment-grade and high-yield debt offerings to IPOs. </p>
                       </div> 
                       <Link href="/services/capital-markets" className="flex-shrink-0 mt-1"> 
                         <ArrowRight className="h-4 w-4 text-light-grey/50 hover:text-gold transition-colors" /> 
@@ -480,8 +483,8 @@ export default function Home() {
                   > 
                     <div className="flex justify-between items-start"> 
                       <div> 
-                        <h3 className="font-heading text-lg md:text-xl font-bold text-light-grey mb-1">Advisory & Regulatory</h3> 
-                        <p className="font-body text-light-grey/70 text-xs mb-0 pr-12 leading-relaxed"> Our public company, corporate governance, employment, and regulatory attorneys act as trusted advisors to our clients on their most sensitive issues. </p> 
+                        <h3 className="font-heading text-base sm:text-lg md:text-xl font-bold text-light-grey mb-1">Advisory & Regulatory</h3>
+                        <p className="font-body text-light-grey/70 text-xs mb-0 pr-4 sm:pr-6 leading-relaxed"> Our public company, corporate governance, employment, and regulatory attorneys act as trusted advisors to our clients on their most sensitive issues. </p>
                       </div> 
                       <Link href="/services/advisory-regulatory" className="flex-shrink-0 mt-1"> 
                         <ArrowRight className="h-4 w-4 text-light-grey/50 hover:text-gold transition-colors" /> 
@@ -499,8 +502,8 @@ export default function Home() {
                   > 
                     <div className="flex justify-between items-start"> 
                       <div> 
-                        <h3 className="font-heading text-lg md:text-xl font-bold text-light-grey mb-1">Innovation</h3> 
-                        <p className="font-body text-light-grey/70 text-xs mb-0 pr-12 leading-relaxed"> We are a pioneer in our industry, committed to continual advancement and finding innovative ways to exceed our clients' expectations. </p> 
+                        <h3 className="font-heading text-base sm:text-lg md:text-xl font-bold text-light-grey mb-1">Innovation</h3>
+                        <p className="font-body text-light-grey/70 text-xs mb-0 pr-4 sm:pr-6 leading-relaxed"> We are a pioneer in our industry, committed to continual advancement and finding innovative ways to exceed our clients' expectations. </p>
                       </div> 
                       <Link href="/services/innovation" className="flex-shrink-0 mt-1"> 
                         <ArrowRight className="h-4 w-4 text-light-grey/50 hover:text-gold transition-colors" /> 
@@ -514,11 +517,11 @@ export default function Home() {
       </section>
 
       {/* Insights Section */}
-      <section className="relative py-20 md:py-28 bg-transparent">
-        <div className="container mx-auto px-8">
+      <section className="relative py-16 sm:py-20 md:py-28 bg-transparent">
+        <div className="container mx-auto px-4 sm:px-6 md:px-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16">
-             <motion.h2 className="font-heading text-3xl md:text-3xl lg:text-4xl font-bold text-light-grey mb-4 md:mb-0" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}> Spotlight on our news and insights </motion.h2>
-             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} className="mr-[20%]"> <Link href="/insights" className="inline-flex items-center text-gold uppercase text-xs tracking-wider font-body group"> <span className="mr-2 group-hover:mr-3 transition-all">VIEW ALL NEWS AND INSIGHTS</span> <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" /> </Link> </motion.div>
+             <motion.h2 className="font-heading text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold text-light-grey mb-4 md:mb-0" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}> Spotlight on our news and insights </motion.h2>
+             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} className="mr-0 md:mr-[20%]"> <Link href="/insights" className="inline-flex items-center text-gold uppercase text-xs tracking-wider font-body group"> <span className="mr-2 group-hover:mr-3 transition-all">VIEW ALL NEWS AND INSIGHTS</span> <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" /> </Link> </motion.div>
           </div>
 
           <div className="grid grid-cols-12 gap-8">
@@ -540,7 +543,7 @@ export default function Home() {
                   />
                 </div>
                  <span className="text-xs text-light-grey/70 mb-1 block font-body">Energy</span>
-                 <h3 className="font-heading text-2xl md:text-3xl font-bold text-light-grey mb-3"> Amara & Partners strengthens U.S. energy and energy transition offering with two strategic partner hires </h3>
+                 <h3 className="font-heading text-xl sm:text-2xl md:text-3xl font-bold text-light-grey mb-3"> Amara & Partners strengthens U.S. energy and energy transition offering with two strategic partner hires </h3>
                  <div className="flex items-center mt-4">
                    <div className="h-5 w-1 bg-gold mr-3"></div>
                    <span className="uppercase text-xs font-medium font-body">FIRM NEWS</span>
@@ -617,12 +620,12 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-       <section className="py-20 md:py-28 bg-gold text-charcoal">
-         <div className="container mx-auto px-8">
+       <section className="py-16 sm:py-20 md:py-28 bg-gold text-charcoal">
+         <div className="container mx-auto px-4 sm:px-6 md:px-8">
            <div className="grid grid-cols-12 gap-8">
              <div className="col-span-12 md:col-span-4">
                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="relative z-10">
-                 <h2 className="font-heading text-xl md:text-2xl lg:text-3xl font-bold mb-5"> Let's start a <br /> conversation </h2>
+                 <h2 className="font-heading text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-5"> Let's start a <br /> conversation </h2>
                  <p className="font-body text-charcoal/80 text-xs mb-8 max-w-md leading-relaxed"> Whether you have a complex legal challenge or are looking for strategic advice, our team is ready to help. </p>
                  <div className="flex flex-wrap gap-6">
                    <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}> <Link href="/contact"> <Button className="bg-charcoal text-gold hover:bg-gold-dark px-6 py-5 rounded-none font-body"> Contact Us <ArrowRight className="h-4 w-4 ml-2" /> </Button> </Link> </motion.div>
@@ -631,10 +634,10 @@ export default function Home() {
                </motion.div>
              </div>
              <div className="col-span-12 md:col-span-4 relative">
-               <div className="grid grid-cols-2 gap-4">
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} className="bg-gold p-5"> <MapPin className="h-5 w-5 text-charcoal/80 mb-3" /> <h3 className="font-heading text-base font-bold mb-2">Abu Dhabi</h3> <p className="font-body text-charcoal/70 text-xs"> Al Sila Tower, ADGM Square <br /> Al Maryah Island </p> </motion.div>
                  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="bg-gold p-5"> <Phone className="h-5 w-5 text-charcoal/80 mb-3" /> <h3 className="font-heading text-base font-bold mb-2">Call Us</h3> <p className="font-body text-charcoal/70 text-xs"> +971 2 123 4567 <br /> Mon-Fri, 8:30AM-5:30PM </p> </motion.div>
-                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} className="bg-gold p-5 col-span-2"> <Mail className="h-5 w-5 text-charcoal/80 mb-3" /> <h3 className="font-heading text-base font-bold mb-2">Email Us</h3> <p className="font-body text-charcoal/70 text-xs"> info@amarapartners.com <br /> For general inquiries </p> </motion.div>
+                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} className="bg-gold p-5 sm:col-span-2"> <Mail className="h-5 w-5 text-charcoal/80 mb-3" /> <h3 className="font-heading text-base font-bold mb-2">Email Us</h3> <p className="font-body text-charcoal/70 text-xs"> info@amarapartners.com <br /> For general inquiries </p> </motion.div>
                </div>
              </div>
            </div>
