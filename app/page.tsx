@@ -43,6 +43,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const heroRef = useRef<HTMLDivElement>(null);
   const servicesRef = useRef<HTMLDivElement>(null);
+  const heroTextRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -110,7 +111,15 @@ export default function Home() {
       const bg = char.getAttribute('data-bg-color') || 'hsla(222, 84%, 4.9%, 0.5)';
       const fg = char.getAttribute('data-fg-color') || 'hsl(222.2, 84%, 4.9%)';
 
-      const text = new SplitType(char as HTMLElement, { types: 'chars' });
+      const text = new SplitType(char as HTMLElement, { types: ['words', 'chars'] });
+
+      // Apply white-space: nowrap to each word to prevent word breaking
+      if (text.words) {
+        text.words.forEach(word => {
+          (word as HTMLElement).style.whiteSpace = 'nowrap';
+          (word as HTMLElement).style.display = 'inline-block';
+        });
+      }
 
       gsap.fromTo(text.chars, 
         {
@@ -133,6 +142,43 @@ export default function Home() {
         }
       );
     });
+
+    // Hero text scroll-based gold fill animation
+    const heroTextElement = document.getElementById('hero-excellence-text');
+    if (heroTextElement) {
+      const heroSplit = new SplitType(heroTextElement, { types: ['chars'] });
+      
+      if (heroSplit.chars) {
+        // Set initial state - all characters start as white
+        gsap.set(heroSplit.chars, { 
+          color: 'white'
+        });
+
+        // Create the scroll-triggered animation that starts from page top
+        ScrollTrigger.create({
+          trigger: "body",
+          start: "top top", // Start immediately when page loads
+          end: "10% top", // Complete by 15% scroll
+          scrub: 1, // Smooth scrubbing tied to scroll position
+          markers: false, // Set to true for debugging
+          onUpdate: (self) => {
+            // Calculate how many characters should be gold based on scroll progress
+            const progress = self.progress;
+            const totalChars = heroSplit.chars!.length;
+            const charsToFill = Math.floor(progress * totalChars);
+            
+            // Fill characters progressively
+            heroSplit.chars!.forEach((char, index) => {
+              if (index < charsToFill) {
+                gsap.set(char, { color: '#DBCDAE' }); // Gold color from Tailwind config
+              } else {
+                gsap.set(char, { color: 'white' }); // White
+              }
+            });
+          }
+        });
+      }
+    }
   }, []);
 
   return (
@@ -277,14 +323,15 @@ export default function Home() {
             
             {/* Bottom-left tagline */}
             <motion.div 
+              ref={heroTextRef}
               initial={{ opacity: 0, y: 20 }} 
               animate={{ opacity: 1, y: 0 }} 
               transition={{ delay: 3.0, duration: 0.8 }} 
-              className="absolute bottom-16 left-8"
+              className="absolute bottom-16 left-12"
             >
-              <div className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+              <div className="font-heading text-7xl md:text-8xl lg:text-8xl font-bold leading-tight">
                 <div className="text-gold">The future of law.</div>
-                <div className="text-white">Excellence, redefined.</div>
+                <div id="hero-excellence-text" className="text-white">Excellence, redefined.</div>
               </div>
             </motion.div>
           </div>
@@ -299,7 +346,7 @@ export default function Home() {
       <section className="relative py-20 md:py-28 bg-transparent">
         <div className="container mx-auto px-8 relative z-10">
           <div className="grid grid-cols-12 gap-8">
-             <div className="col-span-12 md:col-span-3">
+             <div className="col-span-12 md:col-span-1">
                <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="sticky top-32">
                  <h2 className="text-sm font-heading font-bold uppercase tracking-wider text-light-grey mb-2">ABOUT US</h2>
                  <div className="w-12 h-1 bg-gold"></div>
@@ -308,7 +355,7 @@ export default function Home() {
              <div className="col-span-12 md:col-span-9">
                {/* This is the h3 that will be animated by SplitType */}
                <h3
-                 className="reveal-type font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-light-grey mb-8 leading-tight"
+                 className="reveal-type font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-light-grey mb-8 leading-tight"
                  data-bg-color="hsla(45, 25%, 72%, 0.5)"
                  data-fg-color="hsl(45, 25%, 72%)"
                >
@@ -329,7 +376,7 @@ export default function Home() {
       <section ref={servicesRef} className="relative py-20 md:py-28 bg-transparent">
          <div className="container mx-auto px-8">
            <div className="grid grid-cols-12 gap-8">
-             <div className="col-span-12 md:col-span-5 lg:col-span-4">
+             <div className="col-span-12 md:col-span-4 lg:col-span-3 md:col-start-1 lg:col-start-1">
                <motion.div 
                  style={{ 
                    opacity: useTransform(servicesItemsProgress, [0, 1], [0, 1]),
@@ -346,8 +393,8 @@ export default function Home() {
                  <Link href="/services" className="inline-flex items-center text-charcoal uppercase text-xs tracking-wider font-body group"> <span className="mr-2 group-hover:mr-3 transition-all">ALL EXPERTISE</span> <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" /> </Link>
                </motion.div>
              </div>
-             <div className="col-span-12 md:col-span-7 lg:col-span-8 bg-transparent">
-               <div className="space-y-4">
+             <div className="col-span-12 md:col-span-7 lg:col-span-7 bg-transparent">
+               <div className="space-y-2">
                   <motion.div 
                     style={{ 
                       opacity: useTransform(servicesItemsProgress, [0, 1], [0, 1]),
