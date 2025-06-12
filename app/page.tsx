@@ -31,6 +31,7 @@ import SidebarLogo from "@/components/sidebar-logo";
 // import VerticalLogo from "@/components/vertical-logo";
 import { CurvedPath } from "@/curved-path";
 import { HeroSvgPaths } from "@/components/hero-svg-paths";
+import LogoSvg from "@/components/logo-svg";
 
 // Register GSAP plugins
 // This needs to be done once, and it's safe to do it at the module level
@@ -223,16 +224,14 @@ export default function Home() {
           {/* Navigation - Inside Left Column */}
           <header className="fixed top-0 left-0 w-[65%] lg:w-[70%] z-40 bg-transparent">
             <div className="flex items-center justify-between py-6">
-              {/* Brand Name - Far Left */}
+              {/* Brand Logo - Far Left */}
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 2.2, duration: 0.8 }}
                 className="flex items-center ml-[2vw]"
               >
-                <h1 className="font-heading text-2xl md:text-3xl font-bold text-white">
-                  Amara <span className="text-gold">&</span> Partners
-                </h1>
+                <LogoSvg className="h-16 w-auto" />
               </motion.div>
 
               {/* Desktop Navigation - Right Side */}
@@ -518,12 +517,12 @@ export default function Home() {
       <section className="relative py-20 md:py-28 bg-transparent">
         <div className="container mx-auto px-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16">
-             <motion.h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-light-grey mb-4 md:mb-0" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}> Spotlight on our news and insights </motion.h2>
-             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }}> <Link href="/insights" className="inline-flex items-center text-gold uppercase text-xs tracking-wider font-body group"> <span className="mr-2 group-hover:mr-3 transition-all">VIEW ALL NEWS AND INSIGHTS</span> <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" /> </Link> </motion.div>
+             <motion.h2 className="font-heading text-3xl md:text-3xl lg:text-4xl font-bold text-light-grey mb-4 md:mb-0" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}> Spotlight on our news and insights </motion.h2>
+             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} className="mr-[20%]"> <Link href="/insights" className="inline-flex items-center text-gold uppercase text-xs tracking-wider font-body group"> <span className="mr-2 group-hover:mr-3 transition-all">VIEW ALL NEWS AND INSIGHTS</span> <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" /> </Link> </motion.div>
           </div>
 
           <div className="grid grid-cols-12 gap-8">
-            <div className="col-span-12 md:col-span-7">
+            <div className="col-span-12 md:col-span-5">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -621,9 +620,9 @@ export default function Home() {
        <section className="py-20 md:py-28 bg-gold text-charcoal">
          <div className="container mx-auto px-8">
            <div className="grid grid-cols-12 gap-8">
-             <div className="col-span-12 md:col-span-6">
+             <div className="col-span-12 md:col-span-4">
                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="relative z-10">
-                 <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold mb-5"> Let's start a <br /> conversation </h2>
+                 <h2 className="font-heading text-xl md:text-2xl lg:text-3xl font-bold mb-5"> Let's start a <br /> conversation </h2>
                  <p className="font-body text-charcoal/80 text-xs mb-8 max-w-md leading-relaxed"> Whether you have a complex legal challenge or are looking for strategic advice, our team is ready to help. </p>
                  <div className="flex flex-wrap gap-6">
                    <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}> <Link href="/contact"> <Button className="bg-charcoal text-gold hover:bg-gold-dark px-6 py-5 rounded-none font-body"> Contact Us <ArrowRight className="h-4 w-4 ml-2" /> </Button> </Link> </motion.div>
@@ -631,7 +630,7 @@ export default function Home() {
                  </div>
                </motion.div>
              </div>
-             <div className="col-span-12 md:col-span-6 relative">
+             <div className="col-span-12 md:col-span-4 relative">
                <div className="grid grid-cols-2 gap-4">
                  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} className="bg-gold p-5"> <MapPin className="h-5 w-5 text-charcoal/80 mb-3" /> <h3 className="font-heading text-base font-bold mb-2">Abu Dhabi</h3> <p className="font-body text-charcoal/70 text-xs"> Al Sila Tower, ADGM Square <br /> Al Maryah Island </p> </motion.div>
                  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="bg-gold p-5"> <Phone className="h-5 w-5 text-charcoal/80 mb-3" /> <h3 className="font-heading text-base font-bold mb-2">Call Us</h3> <p className="font-body text-charcoal/70 text-xs"> +971 2 123 4567 <br /> Mon-Fri, 8:30AM-5:30PM </p> </motion.div>
