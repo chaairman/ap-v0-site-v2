@@ -73,21 +73,20 @@ export function HeroSvgPaths() {
             if (thirdPath && ballRef.current) {
               console.log("Setting up ball animation with path:", thirdPath)
               
-              // Set initial position of ball to start of path
-              const pathLength = thirdPath.getTotalLength()
-              const startPoint = thirdPath.getPointAtLength(0)
+              // First, remove any SVG positioning attributes and set initial position
               gsap.set(ballRef.current, {
-                x: startPoint.x,
-                y: startPoint.y
+                attr: { cx: "", cy: "" }, // Remove SVG positioning attributes
+                x: 0, // Will be overridden by motionPath
+                y: 0  // Will be overridden by motionPath
               })
-
+              
               // Create the scroll-triggered motion path animation
               gsap.to(ballRef.current, {
                 scrollTrigger: {
                   trigger: document.body,
                   start: "top top",
                   end: "bottom bottom",
-                  scrub: 1,
+                  scrub: 1, // Smooth scrubbing - takes 1 second to catch up
                   onUpdate: (self) => {
                     console.log("Scroll progress:", self.progress)
                   }
@@ -98,7 +97,7 @@ export function HeroSvgPaths() {
                   alignOrigin: [0.5, 0.5],
                   autoRotate: false,
                 },
-                ease: "none",
+                ease: "none", // Linear progression with scroll
               })
             } else {
               console.error("Third path not found for ball animation")
@@ -201,14 +200,11 @@ export function HeroSvgPaths() {
         <circle 
           ref={ballRef} 
           className="ball" 
-          cx="1565.29" 
-          cy="0" 
           r="5"
           fill={glowColor}
           vectorEffect="non-scaling-stroke"
           style={{ 
             transformOrigin: 'center',
-            transform: 'scale(1, 1)',
             vectorEffect: 'non-scaling-stroke'
           }}
         />
