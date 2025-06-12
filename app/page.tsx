@@ -42,6 +42,7 @@ if (typeof window !== "undefined") {
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isContactGold, setIsContactGold] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const servicesRef = useRef<HTMLDivElement>(null);
   const heroTextRef = useRef<HTMLDivElement>(null);
@@ -105,86 +106,122 @@ export default function Home() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // SplitType text animation
-    const splitTypes = document.querySelectorAll('.reveal-type');
+    let gsapContext: gsap.Context | null = null;
 
-    splitTypes.forEach((char, i) => {
-      const bg = char.getAttribute('data-bg-color') || 'hsla(222, 84%, 4.9%, 0.5)';
-      const fg = char.getAttribute('data-fg-color') || 'hsl(222.2, 84%, 4.9%)';
+    const initTextAnimations = async () => {
+      try {
+        const { ScrollTrigger } = await import("gsap/all");
+        gsap.registerPlugin(ScrollTrigger);
 
-      const text = new SplitType(char as HTMLElement, { types: ['words', 'chars'] });
+        // Create a single GSAP context for all text animations
+        gsapContext = gsap.context(() => {
+          // SplitType text animation
+          const splitTypes = document.querySelectorAll('.reveal-type');
 
-      // Apply white-space: nowrap to each word to prevent word breaking
-      if (text.words) {
-        text.words.forEach(word => {
-          (word as HTMLElement).style.whiteSpace = 'nowrap';
-          (word as HTMLElement).style.display = 'inline-block';
-        });
-      }
+          splitTypes.forEach((char, i) => {
+            const bg = char.getAttribute('data-bg-color') || 'hsla(222, 84%, 4.9%, 0.5)';
+            const fg = char.getAttribute('data-fg-color') || 'hsl(222.2, 84%, 4.9%)';
 
-      gsap.fromTo(text.chars, 
-        {
-          color: bg,
-          opacity: 0,
-        },
-        {
-          color: fg,
-          opacity: 1,
-          duration: 0.3,
-          stagger: 0.02,
-          scrollTrigger: {
-            trigger: char,
-            start: 'top 80%',
-            end: 'top 65%',
-            scrub: true,
-            markers: false,
-            toggleActions: 'play play reverse reverse'
-          }
-        }
-      );
-    });
+            const text = new SplitType(char as HTMLElement, { types: ['words', 'chars'] });
 
-    // Hero text scroll-based gold fill animation
-    const heroTextElement = document.getElementById('hero-excellence-text');
-    if (heroTextElement) {
-      const heroSplit = new SplitType(heroTextElement, { types: ['chars'] });
-      
-      if (heroSplit.chars) {
-        // Set initial state - all characters start as white
-        gsap.set(heroSplit.chars, { 
-          color: 'white'
-        });
+            // Apply white-space: nowrap to each word to prevent word breaking
+            if (text.words) {
+              text.words.forEach(word => {
+                (word as HTMLElement).style.whiteSpace = 'nowrap';
+                (word as HTMLElement).style.display = 'inline-block';
+              });
+            }
 
-        // Create the scroll-triggered animation that starts from page top
-        ScrollTrigger.create({
-          trigger: "body",
-          start: "top top", // Start immediately when page loads
-          end: "10% top", // Complete by 15% scroll
-          scrub: 1, // Smooth scrubbing tied to scroll position
-          markers: false, // Set to true for debugging
-          onUpdate: (self) => {
-            // Calculate how many characters should be gold based on scroll progress
-            const progress = self.progress;
-            const totalChars = heroSplit.chars!.length;
-            const charsToFill = Math.floor(progress * totalChars);
-            
-            // Fill characters progressively
-            heroSplit.chars!.forEach((char, index) => {
-              if (index < charsToFill) {
-                gsap.set(char, { color: '#DBCDAE' }); // Gold color from Tailwind config
-              } else {
-                gsap.set(char, { color: 'white' }); // White
+            gsap.fromTo(text.chars, 
+              {
+                color: bg,
+                opacity: 0,
+              },
+              {
+                color: fg,
+                opacity: 1,
+                duration: 0.3,
+                stagger: 0.02,
+                scrollTrigger: {
+                  trigger: char,
+                  start: 'top 80%',
+                  end: 'top 65%',
+                  scrub: true,
+                  markers: false,
+                  toggleActions: 'play play reverse reverse'
+                }
               }
-            });
+            );
+          });
+
+          // Hero text scroll-based gold fill animation
+          const heroTextElement = document.getElementById('hero-excellence-text');
+          if (heroTextElement) {
+            const heroSplit = new SplitType(heroTextElement, { types: ['chars'] });
+            
+            if (heroSplit.chars) {
+              // Set initial state - all characters start as white
+              gsap.set(heroSplit.chars, { 
+                color: 'white'
+              });
+
+              // Create the scroll-triggered animation that starts from page top
+              ScrollTrigger.create({
+                trigger: "body",
+                start: "top top",
+                end: "10% top",
+                scrub: 1,
+                markers: false,
+                refreshPriority: 1, // Higher priority for text animations
+                onUpdate: (self) => {
+                  // Calculate how many characters should be gold based on scroll progress
+                  const progress = self.progress;
+                  const totalChars = heroSplit.chars!.length;
+                  const charsToFill = Math.floor(progress * totalChars);
+                  
+                  // Fill characters progressively
+                  heroSplit.chars!.forEach((char, index) => {
+                    if (index < charsToFill) {
+                      gsap.set(char, { color: '#DBCDAE' });
+                    } else {
+                      gsap.set(char, { color: 'white' });
+                    }
+                  });
+                }
+              });
+            }
           }
         });
+
+        // Refresh ScrollTrigger after all animations are set up
+        setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 100);
+
+      } catch (error) {
+        console.error("Error initializing text animations:", error);
       }
-    }
+    };
+
+    // Delay to ensure DOM is ready and avoid conflicts with hero SVG
+    const timer = setTimeout(initTextAnimations, 400);
+
+    return () => {
+      clearTimeout(timer);
+      if (gsapContext) {
+        gsapContext.revert();
+      }
+    };
   }, []);
+
+  // Callback function to handle ball reaching contact section
+  const handleBallReachContact = (isInContact: boolean) => {
+    setIsContactGold(isInContact);
+  };
 
   return (
     <main className="relative overflow-x-hidden bg-charcoal">
-      <HeroSvgPaths />
+      <HeroSvgPaths onBallReachContact={handleBallReachContact} />
       {/* Curved Path Background */}
       {/* <CurvedPath /> */}
       
@@ -617,24 +654,110 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-       <section className="py-20 md:py-28 bg-gold text-charcoal">
+       <section 
+         className={`py-20 md:py-28 transition-all duration-500 ease-out ${
+           isContactGold ? 'bg-gold text-charcoal' : 'bg-transparent text-light-grey'
+         }`}
+       >
          <div className="container mx-auto px-8">
            <div className="grid grid-cols-12 gap-8">
              <div className="col-span-12 md:col-span-4">
                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="relative z-10">
                  <h2 className="font-heading text-xl md:text-2xl lg:text-3xl font-bold mb-5"> Let's start a <br /> conversation </h2>
-                 <p className="font-body text-charcoal/80 text-xs mb-8 max-w-md leading-relaxed"> Whether you have a complex legal challenge or are looking for strategic advice, our team is ready to help. </p>
+                 <p className={`font-body text-xs mb-8 max-w-md leading-relaxed ${
+                   isContactGold ? 'text-charcoal/80' : 'text-light-grey/80'
+                 }`}> Whether you have a complex legal challenge or are looking for strategic advice, our team is ready to help. </p>
                  <div className="flex flex-wrap gap-6">
-                   <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}> <Link href="/contact"> <Button className="bg-charcoal text-gold hover:bg-gold-dark px-6 py-5 rounded-none font-body"> Contact Us <ArrowRight className="h-4 w-4 ml-2" /> </Button> </Link> </motion.div>
-                   <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}> <Link href="/locations"> <Button variant="outline" className="border-charcoal text-charcoal hover:bg-charcoal/5 px-6 py-5 rounded-none font-body"> Our Locations </Button> </Link> </motion.div>
+                                        <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}> 
+                       <Link href="/contact"> 
+                         <Button className={`px-6 py-5 rounded-none font-body transition-all duration-500 ${
+                           isContactGold 
+                             ? 'bg-charcoal text-gold hover:bg-gold-dark' 
+                             : 'bg-gold text-charcoal hover:bg-gold/80'
+                         }`}> 
+                           Contact Us <ArrowRight className="h-4 w-4 ml-2" /> 
+                         </Button> 
+                       </Link> 
+                     </motion.div>
+                     <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}> 
+                       <Link href="/locations"> 
+                         <Button variant="outline" className={`px-6 py-5 rounded-none font-body transition-all duration-500 ${
+                           isContactGold 
+                             ? 'border-charcoal text-charcoal hover:bg-charcoal/5' 
+                             : 'border-light-grey text-light-grey hover:bg-light-grey/5'
+                         }`}> 
+                           Our Locations 
+                         </Button> 
+                       </Link> 
+                     </motion.div>
                  </div>
                </motion.div>
              </div>
              <div className="col-span-12 md:col-span-4 relative">
                <div className="grid grid-cols-2 gap-4">
-                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} className="bg-gold p-5"> <MapPin className="h-5 w-5 text-charcoal/80 mb-3" /> <h3 className="font-heading text-base font-bold mb-2">Abu Dhabi</h3> <p className="font-body text-charcoal/70 text-xs"> Al Sila Tower, ADGM Square <br /> Al Maryah Island </p> </motion.div>
-                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="bg-gold p-5"> <Phone className="h-5 w-5 text-charcoal/80 mb-3" /> <h3 className="font-heading text-base font-bold mb-2">Call Us</h3> <p className="font-body text-charcoal/70 text-xs"> +971 2 123 4567 <br /> Mon-Fri, 8:30AM-5:30PM </p> </motion.div>
-                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} className="bg-gold p-5 col-span-2"> <Mail className="h-5 w-5 text-charcoal/80 mb-3" /> <h3 className="font-heading text-base font-bold mb-2">Email Us</h3> <p className="font-body text-charcoal/70 text-xs"> info@amarapartners.com <br /> For general inquiries </p> </motion.div>
+                 <motion.div 
+                   initial={{ opacity: 0, y: 20 }} 
+                   whileInView={{ opacity: 1, y: 0 }} 
+                   viewport={{ once: true }} 
+                   transition={{ duration: 0.5, delay: 0.1 }} 
+                   className={`p-5 transition-all duration-500 ${
+                     isContactGold ? 'bg-gold' : 'bg-charcoal border border-light-grey/20'
+                   }`}
+                 > 
+                   <MapPin className={`h-5 w-5 mb-3 ${
+                     isContactGold ? 'text-charcoal/80' : 'text-gold'
+                   }`} /> 
+                   <h3 className={`font-heading text-base font-bold mb-2 ${
+                     isContactGold ? 'text-charcoal' : 'text-light-grey'
+                   }`}>Abu Dhabi</h3> 
+                   <p className={`font-body text-xs ${
+                     isContactGold ? 'text-charcoal/70' : 'text-light-grey/70'
+                   }`}> 
+                     Al Sila Tower, ADGM Square <br /> Al Maryah Island 
+                   </p> 
+                 </motion.div>
+                 <motion.div 
+                   initial={{ opacity: 0, y: 20 }} 
+                   whileInView={{ opacity: 1, y: 0 }} 
+                   viewport={{ once: true }} 
+                   transition={{ duration: 0.5, delay: 0.2 }} 
+                   className={`p-5 transition-all duration-500 ${
+                     isContactGold ? 'bg-gold' : 'bg-charcoal border border-light-grey/20'
+                   }`}
+                 > 
+                   <Phone className={`h-5 w-5 mb-3 ${
+                     isContactGold ? 'text-charcoal/80' : 'text-gold'
+                   }`} /> 
+                   <h3 className={`font-heading text-base font-bold mb-2 ${
+                     isContactGold ? 'text-charcoal' : 'text-light-grey'
+                   }`}>Call Us</h3> 
+                   <p className={`font-body text-xs ${
+                     isContactGold ? 'text-charcoal/70' : 'text-light-grey/70'
+                   }`}> 
+                     +971 2 123 4567 <br /> Mon-Fri, 8:30AM-5:30PM 
+                   </p> 
+                 </motion.div>
+                 <motion.div 
+                   initial={{ opacity: 0, y: 20 }} 
+                   whileInView={{ opacity: 1, y: 0 }} 
+                   viewport={{ once: true }} 
+                   transition={{ duration: 0.5, delay: 0.3 }} 
+                   className={`p-5 col-span-2 transition-all duration-500 ${
+                     isContactGold ? 'bg-gold' : 'bg-charcoal border border-light-grey/20'
+                   }`}
+                 > 
+                   <Mail className={`h-5 w-5 mb-3 ${
+                     isContactGold ? 'text-charcoal/80' : 'text-gold'
+                   }`} /> 
+                   <h3 className={`font-heading text-base font-bold mb-2 ${
+                     isContactGold ? 'text-charcoal' : 'text-light-grey'
+                   }`}>Email Us</h3> 
+                   <p className={`font-body text-xs ${
+                     isContactGold ? 'text-charcoal/70' : 'text-light-grey/70'
+                   }`}> 
+                     info@amarapartners.com <br /> For general inquiries 
+                   </p> 
+                 </motion.div>
                </div>
              </div>
            </div>
