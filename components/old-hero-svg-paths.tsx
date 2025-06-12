@@ -3,11 +3,10 @@
 import { useEffect, useRef } from "react"
 import gsap from "gsap"
 
-export function HeroSvgPaths() {
+export function OldHeroSvgPaths() {
   const svgRef = useRef<SVGSVGElement>(null)
   const ballRef = useRef<SVGCircleElement>(null)
-  // Pre-allocate array with 11 slots for the new paths
-  const pathsRef = useRef<(SVGPathElement | null)[]>(Array(11).fill(null))
+  const pathsRef = useRef<(SVGPathElement | null)[]>([null, null, null, null, null]) // Pre-allocate array with 5 slots
 
   // Define gold colors from your design system
   const lineColor = "#C9B99A" // Darker gold for better visibility
@@ -57,7 +56,7 @@ export function HeroSvgPaths() {
                 strokeDashoffset: 0,
                 duration: 1.5,
                 ease: "power2.out",
-              }, index * 0.08) // Slightly faster stagger for more paths
+              }, index * 0.1) // Stagger each path by 0.1 seconds
             })
 
             // Add enhanced pulsing glow effect to the ball
@@ -69,10 +68,10 @@ export function HeroSvgPaths() {
               ease: "sine.inOut",
             })
 
-            // Animate the ball along one of the curved paths (index 10 - the most interesting curved path)
-            const ballPath = pathsRef.current[10] // Using the last curved path for ball animation
-            if (ballPath && ballRef.current) {
-              console.log("Setting up ball animation with path:", ballPath)
+            // Animate the ball along the middle path (index 2) based on scroll
+            const thirdPath = pathsRef.current[2]
+            if (thirdPath && ballRef.current) {
+              console.log("Setting up ball animation with path:", thirdPath)
               
               // First, remove any SVG positioning attributes and set initial position
               gsap.set(ballRef.current, {
@@ -93,15 +92,15 @@ export function HeroSvgPaths() {
                   }
                 },
                 motionPath: {
-                  path: ballPath,
-                  align: ballPath,
+                  path: thirdPath,
+                  align: thirdPath,
                   alignOrigin: [0.5, 0.5],
                   autoRotate: false,
                 },
                 ease: "none", // Linear progression with scroll
               })
             } else {
-              console.error("Ball path not found for ball animation")
+              console.error("Third path not found for ball animation")
             }
           }, svgRef)
 
@@ -137,130 +136,34 @@ export function HeroSvgPaths() {
           </filter>
         </defs>
 
-        {/* Path 1 - Straight vertical line */}
+        {/* Path 1 */}
         <path
           ref={(el) => addPathRef(el, 0)}
-          d="M1494 -1V1103"
+          d="M1607.23 0C1607.23 0 1691.97 186.253 1644.62 339.265C1597.27 492.277 1520.01 636.847 1577.33 760.84C1634.65 884.833 1634.65 1079 1634.65 1079"
           stroke={lineColor}
           strokeWidth="2"
           fill="none"
-          opacity="0.6"
+          opacity="0.7"
           vectorEffect="non-scaling-stroke"
           filter="url(#heroGlow)"
         />
 
-        {/* Path 2 - Slight curve to center */}
+        {/* Path 2 */}
         <path
           ref={(el) => addPathRef(el, 1)}
-          d="M1612.68 -1.14589C1612.68 -1.14589 1494 -1.1459 1494 1102.63"
+          d="M1544.93 0C1544.93 0 1591.3 187.599 1564.84 292.663C1538.38 397.728 1523.4 413.595 1490.19 514.084C1456.98 614.574 1502.42 714.006 1490.19 806.922C1477.95 899.839 1423 1080 1423 1080"
           stroke={lineColor}
           strokeWidth="2"
           fill="none"
-          opacity="0.6"
+          opacity="0.7"
           vectorEffect="non-scaling-stroke"
           filter="url(#heroGlow)"
         />
 
-        {/* Path 3 - Slight curve to center */}
+        {/* Path 3 - Main path for ball animation */}
         <path
           ref={(el) => addPathRef(el, 2)}
-          d="M1526.22 -1.14589C1526.22 -1.14589 1494 -1.14587 1494 1102.63"
-          stroke={lineColor}
-          strokeWidth="2"
-          fill="none"
-          opacity="0.6"
-          vectorEffect="non-scaling-stroke"
-          filter="url(#heroGlow)"
-        />
-
-        {/* Path 4 - Wide curve to center */}
-        <path
-          ref={(el) => addPathRef(el, 3)}
-          d="M1872.06 -1.14588C1872.06 -1.14588 1494 -1.14591 1494 1115.67"
-          stroke={lineColor}
-          strokeWidth="2"
-          fill="none"
-          opacity="0.6"
-          vectorEffect="non-scaling-stroke"
-          filter="url(#heroGlow)"
-        />
-
-        {/* Path 5 - Medium curve to center */}
-        <path
-          ref={(el) => addPathRef(el, 4)}
-          d="M1777.74 -1.1459C1777.74 -1.1459 1494 -1.14589 1494 1102.63"
-          stroke={lineColor}
-          strokeWidth="2"
-          fill="none"
-          opacity="0.6"
-          vectorEffect="non-scaling-stroke"
-          filter="url(#heroGlow)"
-        />
-
-        {/* Path 6 - Medium curve to center */}
-        <path
-          ref={(el) => addPathRef(el, 5)}
-          d="M1699.14 -1.14589C1699.14 -1.14589 1494 -1.14585 1494 1102.63"
-          stroke={lineColor}
-          strokeWidth="2"
-          fill="none"
-          opacity="0.6"
-          vectorEffect="non-scaling-stroke"
-          filter="url(#heroGlow)"
-        />
-
-        {/* Path 7 - Small curve to center */}
-        <path
-          ref={(el) => addPathRef(el, 6)}
-          d="M1565.52 -1.14589C1565.52 -1.14589 1494 -1.14592 1494 1102.63"
-          stroke={lineColor}
-          strokeWidth="2"
-          fill="none"
-          opacity="0.6"
-          vectorEffect="non-scaling-stroke"
-          filter="url(#heroGlow)"
-        />
-
-        {/* Path 8 - Complex curved path */}
-        <path
-          ref={(el) => addPathRef(el, 7)}
-          d="M1920 -1.14588C1753.64 437.864 1494 -1.14591 1494 1123.01"
-          stroke={lineColor}
-          strokeWidth="2"
-          fill="none"
-          opacity="0.7"
-          vectorEffect="non-scaling-stroke"
-          filter="url(#heroGlow)"
-        />
-
-        {/* Path 9 - Complex curved path */}
-        <path
-          ref={(el) => addPathRef(el, 8)}
-          d="M1826.47 -1.14589C1696.63 434.999 1494 7.41364 1494 1115.67"
-          stroke={lineColor}
-          strokeWidth="2"
-          fill="none"
-          opacity="0.7"
-          vectorEffect="non-scaling-stroke"
-          filter="url(#heroGlow)"
-        />
-
-        {/* Path 10 - Complex curved path */}
-        <path
-          ref={(el) => addPathRef(el, 9)}
-          d="M1738.44 -1.14589C1642.98 434.999 1494 -1.14593 1494 1115.67"
-          stroke={lineColor}
-          strokeWidth="2"
-          fill="none"
-          opacity="0.7"
-          vectorEffect="non-scaling-stroke"
-          filter="url(#heroGlow)"
-        />
-
-        {/* Path 11 - Complex curved path (used for ball animation) */}
-        <path
-          ref={(el) => addPathRef(el, 10)}
-          d="M1659.84 -1.14589C1595.08 429.906 1494 29.0164 1494 1102.63"
+          d="M1565.29 0C1565.29 0 1625.57 124.108 1602.9 339.579C1580.23 555.051 1429.52 553.995 1535.21 761.545C1640.9 969.095 1592.87 1080 1592.87 1080"
           stroke={lineColor}
           strokeWidth="2.5"
           fill="none"
@@ -269,7 +172,31 @@ export function HeroSvgPaths() {
           filter="url(#heroGlow)"
         />
 
-        {/* The ball that follows the eleventh path */}
+        {/* Path 4 */}
+        <path
+          ref={(el) => addPathRef(el, 3)}
+          d="M1734.36 0C1734.36 0 1937.88 152.626 1771.75 339.579C1605.63 526.533 1518.6 615.257 1704.45 761.545C1890.3 907.834 1761.78 1080 1761.78 1080"
+          stroke={lineColor}
+          strokeWidth="2"
+          fill="none"
+          opacity="0.7"
+          vectorEffect="non-scaling-stroke"
+          filter="url(#heroGlow)"
+        />
+
+        {/* Path 5 */}
+        <path
+          ref={(el) => addPathRef(el, 4)}
+          d="M1798.77 0C1798.77 0 1913.49 202.797 1836.3 339.579C1759.12 476.362 1656.24 566.142 1768.74 761.545C1881.24 956.949 1826.29 1080 1826.29 1080"
+          stroke={lineColor}
+          strokeWidth="2"
+          fill="none"
+          opacity="0.7"
+          vectorEffect="non-scaling-stroke"
+          filter="url(#heroGlow)"
+        />
+
+        {/* The ball that follows the third path */}
         <circle 
           ref={ballRef} 
           className="ball" 
