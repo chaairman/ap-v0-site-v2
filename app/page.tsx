@@ -24,6 +24,9 @@ import { SplitText } from "gsap/SplitText";
 // SplitType import
 import SplitType from "split-type";
 
+// Lenis import
+import Lenis from "lenis";
+
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Footer from "@/components/footer";
@@ -101,6 +104,42 @@ export default function Home() {
     Math.max((scrollYVal - navThreshold) / navAnimationDistance, 0),
     1
   );
+
+  // Lenis Smooth Scrolling
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    // Connect Lenis with GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      lenis.destroy();
+      gsap.ticker.remove((time) => {
+        lenis.raf(time * 1000);
+      });
+    };
+  }, []);
 
   // SplitType Animation Logic
   useEffect(() => {
