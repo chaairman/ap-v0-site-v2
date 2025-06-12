@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -215,9 +215,9 @@ export default function Home() {
   }, []);
 
   // Callback function to handle ball reaching contact section
-  const handleBallReachContact = (isInContact: boolean) => {
+  const handleBallReachContact = useCallback((isInContact: boolean) => {
     setIsContactGold(isInContact);
-  };
+  }, [setIsContactGold]);
 
   return (
     <main className="relative overflow-x-hidden bg-charcoal">
