@@ -35,25 +35,28 @@ export function HeroSvgPaths() {
         setTimeout(() => {
           // Create GSAP context for proper cleanup
           const gsapContext = gsap.context(() => {
-            // Scroll-driven path drawing animation
+            // Create timeline for line drawing animation
+            const tl = gsap.timeline({ delay: 2.5 }) // Delay to wait for loading panel to finish
+
+            // Animate all paths drawing from top to bottom
             pathsRef.current.forEach((path, index) => {
               if (!path) return
               const len = path.getTotalLength()
-              // Ensure this set is still here or paths won't be 'hidden' initially for scroll animation
-              gsap.set(path, { strokeDasharray: len, strokeDashoffset: len, opacity: 0.7, filter: 'url(#heroGlow)' })
-
-              gsap.to(path, {
-                strokeDashoffset: 0,
-                ease: "none", // Linear mapping to scroll
-                scrollTrigger: {
-                  trigger: document.body,
-                  start: "top top",
-                  // For 'end', start with "bottom bottom". I will provide refined values later.
-                  end: "bottom bottom",
-                  scrub: 1, // Smooth scrubbing
-                  // markers: true, // Keep markers enabled for this phase
-                }
+              
+              // Set initial state - lines are hidden
+              gsap.set(path, { 
+                strokeDasharray: len, 
+                strokeDashoffset: len, 
+                opacity: 0.7, 
+                filter: 'url(#heroGlow)' 
               })
+
+              // Add each path to the timeline with a slight stagger
+              tl.to(path, {
+                strokeDashoffset: 0,
+                duration: 1.5,
+                ease: "power2.out",
+              }, index * 0.1) // Stagger each path by 0.1 seconds
             })
 
             // Add enhanced pulsing glow effect to the ball

@@ -192,7 +192,7 @@ export default function Home() {
         className="fixed inset-0 z-50 flex items-center justify-center bg-gold"
         initial={{ x: 0 }}
         animate={{ x: isLoading ? 0 : "100%" }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 1 }}
+        transition={{ duration: 0.56, ease: [0.16, 1, 0.3, 1], delay: 1 }}
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
